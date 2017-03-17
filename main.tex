@@ -1,0 +1,188 @@
+%%%%%%%%%%%%
+%% Please rename this main.tex file and the output PDF to
+%% [lastname_firstname_graduationyear]
+%% before submission.
+%%%%%%%%%%%%
+
+\documentclass[12pt]{caltech_thesis}
+\usepackage[hyphens]{url}
+\usepackage{lipsum}
+\usepackage{graphicx}
+\graphicspath{{images/}}
+\usepackage{todonotes}
+
+%% Tentative: newtx for better-looking Times
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{newtxtext,newtxmath}
+\usepackage{nameref}
+% line numbers
+\usepackage[right]{lineno}
+% improves typesetting in LaTeX
+% \usepackage{microtype}
+% degree symbol
+\usepackage{gensymb}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{color}
+\definecolor{Gray}{gray}{.25}
+
+\usepackage{xcolor}
+\usepackage[colorlinks = true,
+            linkcolor = blue,
+            urlcolor  = blue,
+            citecolor = blue,
+            anchorcolor = blue]{hyperref}
+%
+\newcommand{\qval}[1]{$q<10^{-#1}$}
+\newcommand{\cel}{\emph{C.~elegans}}
+\newcommand{\ecol}{\emph{E.~coli}}
+%
+% % gene names
+\newcommand{\gene}[1]{\emph{#1}}
+%
+
+% Must use biblatex to produce the Published Contents and Contributions, per-chapter bibliography (if desired), etc.
+\usepackage[
+    backend=biber,natbib,
+    % IMPORTANT: load a style suitable for your discipline
+    style=authoryear
+]{biblatex}
+
+% Name of your .bib file(s)
+\addbibresource{example.bib}
+\addbibresource{hypoxia.bib}
+\addbibresource{ownpubs.bib}
+
+\begin{document}
+
+% Do remember to remove the square bracket!
+\title{A theory of genetic analysis using transcriptomic phenotypes}
+\author{David Angeles-Albores}
+
+\degreeaward{Doctor of Philosophy}                 % Degree to be awarded
+\university{California Institute of Technology}    % Institution name
+\address{Pasadena, California}                     % Institution address
+\unilogo{caltech.png}                                 % Institution logo
+\copyyear{[Year Degree Conferred]}  % Year (of graduation) on diploma
+\defenddate{[Exact Date]}          % Date of defense
+
+\orcid{0000--0001--5497--8264}
+
+%% IMPORTANT: Select ONE of the rights statement below.
+\rightsstatement{All rights
+reserved\todo[size=\footnotesize]{Choose one from the choices in the source
+code!! And delete this \texttt{todo} when you're done that}}
+% \rightsstatement{All rights reserved except where otherwise noted}
+% \rightsstatement{Some rights reserved. This thesis is distributed under a
+% [name license, e.g., ``Creative Commons Attribution-NonCommercial-ShareAlike License'']}
+
+%%  If you'd like to remove the Caltech logo from your title page,
+% simply remove the "[logo]" text from the maketitle command
+\maketitle[logo]
+%\maketitle
+
+\begin{acknowledgements}
+   [Add acknowledgements here. If you do not wish to add any to your thesis,
+   you may simply add a blank titled Acknowledgements page.]
+\end{acknowledgements}
+
+\begin{abstract}
+   [This abstract must provide a succinct and informative condensation of your
+   work. Candidates are welcome to prepare a lengthier abstract for inclusion
+   in the dissertation, and provide a shorter one in the CaltechTHESIS record.]
+\end{abstract}
+
+%% Uncomment the `iknowhattodo' option to dismiss the instruction in the PDF.
+\begin{publishedcontent}%[iknowwhattodo]
+% List your publications and contributions here.
+\nocite{Cahn:etal:2015,Cahn:etal:2016}
+\end{publishedcontent}
+
+\tableofcontents
+\listoffigures
+\listoftables
+\printnomenclature{}
+
+\mainmatter{}
+
+\chapter{Introduction}
+\begin{refsection}
+  \input{chapters/introduction}
+  \printbibliography[heading=subbibliography]
+\end{refsection}
+
+\chapter{Genetic analysis of a metazoan pathway using transcriptomic phenotypes}
+\begin{refsection}
+  \input{chapters/hypoxia}
+  \printbibliography[heading=subbibliography]
+\end{refsection}
+
+\chapter{Transcriptomic description of an endogenous female state in \cel{}}
+\begin{refsection}
+  % \input{chapters/hypoxia}
+  % \printbibliography[heading=subbibliography]
+\end{refsection}
+
+\chapter{Understanding the SynMuv phenotype from a transcriptomic perspective}
+\begin{refsection}
+  % \input{chapters/hypoxia}
+  % \printbibliography[heading=subbibliography]
+\end{refsection}
+
+\chapter{A study of dosage response in \cel{} using transcriptome profiling}
+\begin{refsection}
+  % \input{chapters/hypoxia}
+  % \printbibliography[heading=subbibliography]
+\end{refsection}
+
+\chapter{Structural genes have transcriptional consequences}
+\begin{refsection}
+  % \input{chapters/hypoxia}
+  % \printbibliography[heading=subbibliography]
+\end{refsection}
+
+\chapter{Genetic analysis of a pathway using transcriptomic trans-phenotypes}
+\begin{refsection}
+  % \input{chapters/hypoxia}
+  % \printbibliography[heading=subbibliography]
+\end{refsection}
+
+\chapter{Tissue enrichment analysis for \cel{} genomics}
+\begin{refsection}
+  % \input{chapters/hypoxia}
+  % \printbibliography[heading=subbibliography]
+\end{refsection}
+
+\chapter{Phenotype and gene ontology enrichment as guides for disease modeling
+         in \cel{}}
+\begin{refsection}
+  % \input{chapters/hypoxia}
+  % \printbibliography[heading=subbibliography]
+\end{refsection}
+
+\chapter{An automated framework for transcriptional profiling}
+\begin{refsection}
+  % \input{chapters/hypoxia}
+  % \printbibliography[heading=subbibliography]
+\end{refsection}
+
+
+
+\printbibliography[heading=bibintoc]
+
+\appendix
+
+\chapter{Questionnaire}
+\chapter{Consent Form}
+
+\printindex
+
+\theendnotes{}
+
+%% Pocket materials at the VERY END of thesis
+% \pocketmaterial
+\extrachapter{Pocket Material: Map of Case Study Solar Systems}
+
+
+\end{document}

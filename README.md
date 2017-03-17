@@ -1,2 +1,0 @@
-# Thesis
-My Caltech Thesis
