@@ -10,6 +10,12 @@
 \usepackage{graphicx}
 \graphicspath{{images/}}
 \usepackage{todonotes}
+% \usepackage{caption}
+\usepackage{adjustbox}
+\usepackage{csvsimple} %insert tables using .csv files
+
+% activates the subbottom and subtop environments in memoir
+% \newsubfloat{figure}
 
 %% Tentative: newtx for better-looking Times
 \usepackage[utf8]{inputenc}
@@ -37,7 +43,7 @@
 \newcommand{\qval}[1]{$q<10^{-#1}$}
 \newcommand{\cel}{\emph{C.~elegans}}
 \newcommand{\ecol}{\emph{E.~coli}}
-%
+
 % % gene names
 \newcommand{\gene}[1]{\emph{#1}}
 %
@@ -53,6 +59,8 @@
 \addbibresource{example.bib}
 \addbibresource{hypoxia.bib}
 \addbibresource{female-transcriptome.bib}
+\addbibresource{tea.bib}
+\addbibresource{pea.bib}
 \addbibresource{ownpubs.bib}
 
 \begin{document}
@@ -72,8 +80,10 @@
 
 %% IMPORTANT: Select ONE of the rights statement below.
 \rightsstatement{All rights
-reserved\todo[size=\footnotesize]{Choose one from the choices in the source
-code!! And delete this \texttt{todo} when you're done that}}
+reserved
+% \todo[size=\footnotesize]{Choose one from the choices in the source
+% code!! And delete this \texttt{todo} when you're done that}
+}
 % \rightsstatement{All rights reserved except where otherwise noted}
 % \rightsstatement{Some rights reserved. This thesis is distributed under a
 % [name license, e.g., ``Creative Commons Attribution-NonCommercial-ShareAlike License'']}
@@ -151,15 +161,15 @@ code!! And delete this \texttt{todo} when you're done that}}
 
 \chapter{Tissue enrichment analysis for \cel{} genomics}
 \begin{refsection}
-  % \input{chapters/hypoxia}
-  % \printbibliography[heading=subbibliography]
+  \input{chapters/tea}
+  \printbibliography[heading=subbibliography]
 \end{refsection}
 
 \chapter{Phenotype and gene ontology enrichment as guides for disease modeling
          in \cel{}}
 \begin{refsection}
-  % \input{chapters/hypoxia}
-  % \printbibliography[heading=subbibliography]
+  \input{chapters/pea}
+  \printbibliography[heading=subbibliography]
 \end{refsection}
 
 \chapter{An automated framework for transcriptional profiling}
@@ -170,7 +180,7 @@ code!! And delete this \texttt{todo} when you're done that}}
 
 
 
-\printbibliography[heading=bibintoc]
+% \printbibliography[heading=bibintoc]
 
 \appendix
 
