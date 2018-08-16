@@ -112,6 +112,39 @@ scores exceeds a predetermined threshold, and if so remove this sister set from
 the ontology. We referred to these two scoring criteria as `\textbf{avg}' and
 `\textbf{any}' respectively.
 
+\begin{figure}
+  \centering{}
+  \subbottom{
+    \includegraphics[width=0.3\textwidth]{teaims/Redundancy_Trimming_Ontology.pdf}
+    }
+  \subbottom{%
+    \includegraphics[width=0.3\textwidth]{teaims/Floor_Trimming_Ontogeny.pdf}
+    }
+  \subbottom{%
+    \includegraphics[width=0.3\linewidth]{teaims/Ceiling_Trimming_Ontology.pdf}
+    }
+  \caption{Schematic representation of trimming filters for an acyclical
+           ontology.
+    \textbf{a.}
+    The parent node (green) contains at least as many
+    annotations as the union of the two sisters. These two sisters share
+    annotations extensively, as expressed by the overlap in the Venn diagram,
+    so they qualify for removal.
+  	\textbf{b.}
+    Nodes with less than a threshold number of genes are
+    trimmed (red) and discarded from the dictionary. Here, the example threshold
+    is 25 genes. Nodes $\epsilon, \zeta, \eta$, shown in red are removed.
+  	\textbf{c.}
+    Parent nodes are removed recursively, starting from
+    the root, if all their daughter nodes have more than the threshold number of
+    annotations. Nodes in grey ($\epsilon, \zeta, \eta$) were removed in the
+    previous step. Nodes $\alpha, \beta$ shown in red are trimmed because each one
+    has a complete daughter set. Only nodes $\gamma$ and $\delta$ will be used to
+    generate the static dictionary.}
+\label{fig:simdiagram}
+\end{figure}
+
+
 \subsubsection*{Terminal branch terms and parent terms can be
 safely removed in an algorithmic fashion }
 Another problem arises from the ontology being scarcely populated. Many nodes
@@ -158,6 +191,27 @@ applied as part of each new WormBase release. This ensures that the ontology
 database we are using remains up-to-date with regards to both addition or removal
 of specific terms as well as with regard to gene expression annotations.
 
+\begin{table}[p]
+	\caption{
+	Parameter specifications and number of tissues for all dictionaries. The
+  `Method' column refers to the trimming criterion for the similarity metric.
+  We used two such criteria, `any' and `avg'.`any': For a given sister set, if
+  any sister had a similarity exceeding the corresponding threshold, all sisters
+  were removed from the final dictionary. `avg': For a given sister set, if the
+  average similarity across all the sisters in the set was greater than the
+  corresponding threshold, all sisters were removed from the final dictionary.
+	}
+	\csvreader[tabular= c | c | c | c,
+	table head= {\textbf{Annotation Cutoff}} & {\textbf{Similarity Threshold}}
+  & {\textbf{Method}} & {\textbf{No. Of Terms in Dictionary}}\\\toprule,
+	late after line= \\,
+	late after last line= \\\hline
+	]
+	{tables/TissueNumbers.csv}{}
+	{\csvcoli & \csvcolii & \csvcoliii & \csvcoliv}
+
+\label{tab:DictionarySpecs}
+\end{table}
 
 \subsection*{Tissue enrichment testing via a hypergeometric model}
 Having built a static dictionary, we generated a Python script that implements a
@@ -203,6 +257,39 @@ trimmed ontology is generated using our filters; in parallel, users can submit
 their gene lists through WormBase for testing, with results output in a number
 of formats (see Figure~\ref{fig:workflow}).
 
+%gui
+\begin{figure}[htbp]
+	\centering
+    \includegraphics[width=0.5\textwidth]{teaims/guiresults.png}
+ 	\caption{
+  Screenshot of results from the web GUI.
+	After inputting a gene-list, the user is provided with the results. An HTML
+  table is output with hyperlinks to the ontology terms. A publication-ready
+  graph is provided below, which can be saved by  dragging to the desktop. The
+  graph is colored for better visualization; color is not intended to convey
+  information. The graph and the table show anatomy terms in  human-readable
+  format, followed by their unique WBbt ID.\@ Finally, lists  of the genes used
+  and discarded for the analysis are also presented.}
+\label{fig:GUIresults}
+\end{figure}
+
+% workflow
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.95\textwidth]{teaims/workflow.pdf}
+	\caption{
+	TEA Workflow.
+	The complete ontology is annotated continuously by WormBase curators. After
+  each update, the ontology is processed to remove uninformative terms, and the
+  remaining terms are used for statistical testing.
+	Users can select a gene list and input it into our tool using our WormBase
+  portal. The gene list is tested for enrichment using the trimmed ontology, and
+  results are output in tabular and graphic formats for analysis.}
+\label{fig:workflow}
+\end{figure}
+
+
+
 \subsection*{Validation of the algorithm and optimizing parameter selection}
 We wanted to select a dictionary that included enough terms to be specific beyond
 the most basic \emph{C.~elegans} tissues, yet would minimize the number of
@@ -240,6 +327,21 @@ specificity. Based on these observations, we ruled out the dictionary with the
 100 gene annotation cut-off: it had the fewest terms and its q-values were not
 low enough in our opinion to compensate for the trade-off in specificity.
 
+%q plot
+\begin{figure}[htbp]
+	\includegraphics[width=.6\textwidth]{teaims/avgQKDE_method=any.pdf}
+  \caption{
+  Kernel density estimates (KDE) for 30 gold standard datasets.
+  We ran TEA on 30 datasets we believed to be enriched in particular tissues
+  and pooled all the results to observe the distribution of q-values. The
+  mode of the distribution for dictionaries with annotation cut-offs of 100
+  and 50 genes are very similar; however, when the cut-off is lowered to 25
+  genes, the mode of the distribution shifts to the left, potentially
+  signalling a decrease in measurement power.}
+\label{fig:qvals}
+\end{figure}
+
+
 %dictionaries that work well
 To select between dictionaries generated between 50, 33 and 25 annotation
 cut-offs, and also to ensure the terms that are selected as enriched by our
@@ -263,6 +365,23 @@ E lineage, which is the intestinal precursor lineage in \emph{C.~elegans}, as
 enriched. Both of these results capture specific aspects of \emph{C.~elegans}
 that are well known to developmental biologists.
 
+\begin{table}[p]
+	\caption{
+	Comparison of results for a GABAergic neuronal-enriched gene set from
+  Watson~\citep{Watson2008a} showing that results are similar regardless of
+  annotation cutoff. We ran the same gene list on a dictionary with a minimum
+  annotation cutoff of 50, similarity threshold of 0.95 and similarity method
+  `any' versus another with a minimum annotation cutoff of 33, similarity
+  threshold of 0.95 and similarity method `any'. In the table, columns are
+  abeled with their significance value (Q-value) or enrichment fold change
+  followed by a hyphen and a number which indicates which the cutoff for the
+  dictionary that was used for testing. Not all tissues are present in either
+  dictionary. Hyphens denote not-applicable values, which occurs when a
+  particular tissue is not present in both dictionaries.
+	}
+\label{tab:intraagree}
+\end{table}
+
 %Bad stuff.
 Not all queries worked equally well. For example, a number of intestinal
 sets~\citep{Spencer2011, Pauli2006} were not enriched in intestine-related terms
@@ -284,6 +403,21 @@ redundancy threshold using the `any' criterion performed best, with a good
 balance between specificity, verbosity and accuracy, so we selected this
 parameter set to generate our static dictionary. As of this publication, the
 testable dictionary contains 261 terms.
+
+%gaba
+\begin{figure}
+	\centering{}
+  \includegraphics[width=0.6\textwidth]{teaims/GABAcomparison3.pdf}
+  \caption{
+  Independently derived gene sets show similar results 	when tested
+  with the same dictionary.
+  \textbf{Set 1.} GABAergic gene set from Watson~\citep{Watson2008a}.
+  \textbf{Set 2.} GABAergic gene set from Spencer~\citep{Spencer2011}.
+  Arrowheads highlight identical terms between both analyses. All terms refer to
+  neurons or neuronal tissues and are GABA-associated. Dictionary with cutoff:
+  33; threshold: 0.95; method: `any'.}
+\label{fig:interagree}
+\end{figure}
 
 
 \subsection*{Applying the tool}
@@ -309,6 +443,27 @@ pathogen. Indeed, several studies~\citep{Meisel2014, Zhang2005} have provided
 evidence that \emph{C.~elegans} uses chemosensory neurons to identify pathogens.
 Our results highlight the involvement of various \emph{C.~elegans} neuronal
 tissues in pathogen defense.
+
+\begin{figure}[htbp]
+		\centering{}
+    \includegraphics[width=0.65\textwidth]{teaims/engelmann-GO-tea-comparison.pdf}
+  	\caption{
+	\emph{D.~coniospora} Gene Enrichment Analysis and Tissue Enrichment
+  Analysis results.
+	We compared and contrasted the results from a gene enrichment analysis program,
+  pantherDB, with TEA by analyzing genes that were significantly down-regulated
+  when \emph{C.~elegans} was exposed to \emph{D.~coniospora} in a previously
+  published dataset by Engelmann \emph{et al}~\citep{Engelmann2011} with both
+  tools.
+	\textbf{a.} pantherDB screenshot of results, sorted by p-value. Only top hits
+  shown.
+	\textbf{b.} TEA results, sorted by q-value (lowest on top) and fold-change.
+	Both pantherDB and TEA identify terms associated with neurons (red square). The
+  two analyses provide complementary, not redundant, information.
+	}
+\label{fig:Dcon}
+\end{figure}
+
 
 \section*{Discussion}
 %TEA Discussion
@@ -506,179 +661,3 @@ same address, under the `tests' folder.
   \subsection*{Additional file 4 --- Results}
     A folder containing a complete version of the results we generated for this
     paper.
-
-%
-% \section*{Figures}
-%
-% % Figures describing algorithm
-\begin{figure}
-  \centering
-  \subbottom{
-    \includegraphics[width=0.3\textwidth]{teaims/Redundancy_Trimming_Ontology.pdf}
-    }
-  \subbottom{%
-    \includegraphics[width=0.3\textwidth]{teaims/Floor_Trimming_Ontogeny.pdf}
-    }
-  \subbottom{%
-    \includegraphics[width=0.3\linewidth]{teaims/Ceiling_Trimming_Ontology.pdf}
-    }
-\label{fig:simdiagram}
-  \caption{Schematic representation of trimming filters for an acyclical
-           ontology.
-    \textbf{a.}
-    The parent node (green) contains at least as many
-    annotations as the union of the two sisters. These two sisters share
-    annotations extensively, as expressed by the overlap in the Venn diagram,
-    so they qualify for removal.
-  	\textbf{b.}
-    Nodes with less than a threshold number of genes are
-    trimmed (red) and discarded from the dictionary. Here, the example threshold
-    is 25 genes. Nodes $\epsilon, \zeta, \eta$, shown in red are removed.
-  	\textbf{c.}
-    Parent nodes are removed recursively, starting from
-    the root, if all their daughter nodes have more than the threshold number of
-    annotations. Nodes in grey ($\epsilon, \zeta, \eta$) were removed in the
-    previous step. Nodes $\alpha, \beta$ shown in red are trimmed because each one
-    has a complete daughter set. Only nodes $\gamma$ and $\delta$ will be used to
-    generate the static dictionary.}
-\end{figure}
-
-
-%gui
-\begin{figure}[htbp]
-	\centering
-    \includegraphics[width=0.5\textwidth]{teaims/guiresults.png}
- 	\caption{
-  Screenshot of results from the web GUI.
-	After inputting a gene-list, the user is provided with the results. An HTML
-  table is output with hyperlinks to the ontology terms. A publication-ready
-  graph is provided below, which can be saved by  dragging to the desktop. The
-  graph is colored for better visualization; color is not intended to convey
-  information. The graph and the table show anatomy terms in  human-readable
-  format, followed by their unique WBbt ID.\@ Finally, lists  of the genes used
-  and discarded for the analysis are also presented.}
-\label{fig:GUIresults}
-\end{figure}
-
-% workflow
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width=0.95\textwidth]{teaims/workflow.pdf}
-	\caption{
-	TEA Workflow.
-	The complete ontology is annotated continuously by WormBase curators. After
-  each update, the ontology is processed to remove uninformative terms, and the
-  remaining terms are used for statistical testing.
-	Users can select a gene list and input it into our tool using our WormBase
-  portal. The gene list is tested for enrichment using the trimmed ontology, and
-  results are output in tabular and graphic formats for analysis.}
-\label{fig:workflow}
-\end{figure}
-
-% statistical testing and validation Figures
-%q plot
-\begin{figure}[htbp]
-	\includegraphics[width=.6\textwidth]{teaims/avgQKDE_method=any.pdf}
-  \caption{
-  Kernel density estimates (KDE) for 30 gold standard datasets.
-  We ran TEA on 30 datasets we believed to be enriched in particular tissues
-  and pooled all the results to observe the distribution of q-values. The
-  mode of the distribution for dictionaries with annotation cut-offs of 100
-  and 50 genes are very similar; however, when the cut-off is lowered to 25
-  genes, the mode of the distribution shifts to the left, potentially
-  signalling a decrease in measurement power.}
-\label{fig:qvals}
-\end{figure}
-
-
-
-%gaba
-\begin{figure}
-  \includegraphics[width=0.6\textwidth]{teaims/GABAcomparison3.pdf}
-  \caption{
-  Independently derived gene sets show similar results 	when tested
-  with the same dictionary.
-  \textbf{Set 1.} GABAergic gene set from Watson~\citep{Watson2008a}.
-  \textbf{Set 2.} GABAergic gene set from Spencer~\citep{Spencer2011}.
-  Arrowheads highlight identical terms between both analyses. All terms refer to
-  neurons or neuronal tissues and are GABA-associated. Dictionary with cutoff:
-  33; threshold: 0.95; method: `any'.}
-\label{fig:interagree}
-\end{figure}
-
-
-%results Figures - engelmann et al reanalysis
-%labels are missing.
-\begin{figure}[htbp]
-    \includegraphics[width=0.65\textwidth]{teaims/engelmann-GO-tea-comparison.pdf}
-  	\caption{
-	\emph{D.~coniospora} Gene Enrichment Analysis and Tissue Enrichment
-  Analysis results.
-	We compared and contrasted the results from a gene enrichment analysis program,
-  pantherDB, with TEA by analyzing genes that were significantly down-regulated
-  when \emph{C.~elegans} was exposed to \emph{D.~coniospora} in a previously
-  published dataset by Engelmann \emph{et al}~\citep{Engelmann2011} with both
-  tools.
-	\textbf{a.} pantherDB screenshot of results, sorted by p-value. Only top hits
-  shown.
-	\textbf{b.} TEA results, sorted by q-value (lowest on top) and fold-change.
-	Both pantherDB and TEA identify terms associated with neurons (red square). The
-  two analyses provide complementary, not redundant, information.
-	}
-\label{fig:Dcon}
-\end{figure}
-
-\section*{Tables}
-
-\begin{table}[p]
-	\caption{
-	Parameter specifications and number of tissues for all dictionaries. The
-  `Method' column refers to the trimming criterion for the similarity metric.
-  We used two such criteria, `any' and `avg'.`any': For a given sister set, if
-  any sister had a similarity exceeding the corresponding threshold, all sisters
-  were removed from the final dictionary. `avg': For a given sister set, if the
-  average similarity across all the sisters in the set was greater than the
-  corresponding threshold, all sisters were removed from the final dictionary.
-	}
-	\csvreader[tabular= c | c | c | c,
-	table head= {\textbf{Annotation Cutoff}} & {\textbf{Similarity Threshold}}
-  & {\textbf{Method}} & {\textbf{No. Of Terms in Dictionary}}\\\toprule,
-	late after line= \\,
-	late after last line= \\\hline
-	]
-	{tables/TissueNumbers.csv}{}
-	{\csvcoli & \csvcolii & \csvcoliii & \csvcoliv}
-
-\label{tab:DictionarySpecs}
-\end{table}
-
-\begin{table}[p]
-	\caption{
-	Comparison of results for a GABAergic neuronal-enriched gene set from
-  Watson~\citep{Watson2008a} showing that results are similar regardless of
-  annotation cutoff. We ran the same gene list on a dictionary with a minimum
-  annotation cutoff of 50, similarity threshold of 0.95 and similarity method
-  `any' versus another with a minimum annotation cutoff of 33, similarity
-  threshold of 0.95 and similarity method `any'. In the table, columns are
-  abeled with their significance value (Q-value) or enrichment fold change
-  followed by a hyphen and a number which indicates which the cutoff for the
-  dictionary that was used for testing. Not all tissues are present in either
-  dictionary. Hyphens denote not-applicable values, which occurs when a
-  particular tissue is not present in both dictionaries.
-	}
-
-	% \begin{adjustbox}{width=1\textwidth}
-	% 	\centering
-	% 	% \csvreader{figures/dict-comparison-50-33.csv}
-	%
-	% 	\csvreader[tabular={ r | c | c | c | c},
-	% 		    table head ={\textbf{Tissue}} & {\textbf{Q-value-33}} & {\textbf{Q-value-50}} & {\textbf{Enrichment-33}} & {\textbf{Enrichment-50}}\\\hline,
-	% 		    late after line= \\,
-	% 	late after last line=\\\hline
-	% 	]%
-	% 	{figures/dict-comparison-50-33.csv}{}
-	% 	{\csvcoli & \csvcolii & \csvcoliii & \csvcoliv & \csvcolv}
-	%
-	% \end{adjustbox}
-\label{tab:intraagree}
-\end{table}

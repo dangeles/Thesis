@@ -11,13 +11,15 @@
 \RequirePackage{etoolbox}
 
 % Overleaf 28 Jan: Page geometry
-\RequirePackage[letterpaper,top=1in,bottom=1in,left=1.5in,right=1.5in,headsep=\dimexpr 0.25in-1em,marginparwidth=1.25in]{geometry}
+\RequirePackage[letterpaper,top=1in,bottom=1in,left=1.5in,right=1.5in,
+                headsep=\dimexpr 0.25in-1em,marginparwidth=1.25in]{geometry}
 
 % Page style
 \makeoddhead{headings}{}{}{\thepage}
 \makeevenhead{headings}{}{}{\thepage}
 
-\RequirePackage{graphicx}
+\RequirePackage{graphicx,xcolor}
+
 
 %% Overleaf 24 Jan: Formatting of ToC and lists
 \setcounter{tocdepth}{1}
@@ -63,7 +65,7 @@
 
 % Merged list of figures and tables -- not needed
 % \def\table{\def\figurename{Table}\figure}
-% \let\endtable\endfigure 
+% \let\endtable\endfigure
 
 \setlength{\cftbeforefigureskip}{0pt}
 \renewcommand{\cftfiguredotsep}{\cftdotsep}
@@ -102,7 +104,7 @@
 \newcommand{\extrachapter}[2][\@empty]{%
   \chapter*{#2}%
   \addcontentsline{toc}{chapter}{\ifx#1\@empty{#2}\else{#1}\fi}}
-  
+
 % Section headings
 \setsecheadstyle{\normalfont\bfseries}
 \setbeforesecskip{\onelineskip}
@@ -110,7 +112,7 @@
 \setsubsecheadstyle{\normalfont\bfseries}
 \setbeforesubsecskip{\onelineskip}
 \setaftersubsecskip{1pt}
-  
+
 \aliaspagestyle{chapter}{headings}
 
 %
@@ -221,12 +223,23 @@
   \AtBeginBibliography{\SingleSpacing}
   \setlength{\bibitemsep}{\parskip}
   \defbibheading{publishedcontent}{\extrachapter{Published Content and Contributions}}
-  \defbibnote{pcinstructions}{[Include a bibliography of published articles or other material that are included as part of the thesis.  Describe your role with the each article and its contents.  Citations must include DOIs or publisher URLs if available electronically.
- 
-If you are incorporating any third-party material in the thesis, including works that you have authored/co-authored but for which you have transferred copyright, you must indicate that permission has been secured to use the material. For example: ``Fig.~2 reprinted with permission from the copyright holder, {holder name}''
+  \defbibnote{pcinstructions}{[Include a bibliography of published articles or
+                               other material that are included as part of the
+                               thesis. Describe your role with the each article
+                               and its contents. Citations must include DOIs or
+                               publisher URLs if available electronically.
 
-Add the option \texttt{iknowwhattodo} to this environment to dismiss this message.]}
-  
+                               If you are incorporating any third-party material
+                               in the thesis, including works that you have
+                               authored/co-authored but for which you have
+                               transferred copyright, you must indicate that
+                               permission has been secured to use the material.
+                               For example: ``Fig.~2 reprinted with permission
+                               from the copyright holder, {holder name}''
+
+                               Add the option \texttt{iknowwhattodo} to this
+                               environment to dismiss this message.]}
+
   \newenvironment{publishedcontent}[1][]{
     \newtoggle{printinstr}
     \ifstrequal{#1}{iknowwhattodo}
@@ -246,7 +259,7 @@ Add the option \texttt{iknowwhattodo} to this environment to dismiss this messag
      \end{refsection}
      \citereset
   }
-  
+
   \newcommand{\publishedas}[1]{
     \begin{refsection}
     \nocite{#1}
@@ -274,5 +287,31 @@ Add the option \texttt{iknowwhattodo} to this environment to dismiss this messag
 
 % Overleaf: 28 January 2016 -- no more pagenumbers in the TOC
 \newcommand{\pocketmaterial}{\addtocontents{toc}{\cftpagenumbersoff{chapter}}}
+
+% captions -- David Angeles
+\RequirePackage[labelfont={bf,sf},%
+                labelsep=space,%
+                figurename=Figure,%
+                singlelinecheck=off,%
+                justification=RaggedRight]{caption}
+
+
+% Nice Algorithms -- David Angeles
+\RequirePackage{algorithm}
+\RequirePackage[noend]{algpseudocode}
+
+\definecolor{color2}{RGB}{54,117,174} % color
+
+\makeatletter
+\newcommand\fs@coloruled{\def\@fs@cfont{\bfseries}\let\@fs@capt\floatc@coloruled
+  \def\@fs@pre{\kern2pt}%
+  \def\@fs@post{\kern2pt{\color{color2}\hrule}\relax}%
+  \def\@fs@mid{\kern2pt{\color{color2}\hrule}\kern2pt}%
+  \let\@fs@iftopcapt\iftrue}
+\makeatother
+
+\floatstyle{coloruled}
+\restylefloat{algorithm}
+
 
 \endinput

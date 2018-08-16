@@ -10,9 +10,9 @@
 \usepackage{graphicx}
 \graphicspath{{images/}}
 \usepackage{todonotes}
-% \usepackage{caption}
 \usepackage{adjustbox}
 \usepackage{csvsimple} %insert tables using .csv files
+
 
 % activates the subbottom and subtop environments in memoir
 % \newsubfloat{figure}
@@ -33,22 +33,24 @@
 \usepackage{color}
 \definecolor{Gray}{gray}{.25}
 
-\usepackage{xcolor}
 \usepackage[colorlinks = true,
             linkcolor = blue,
             urlcolor  = blue,
             citecolor = blue,
             anchorcolor = blue]{hyperref}
-%
+
+%commands
 \newcommand{\qval}[1]{$q<10^{-#1}$}
 \newcommand{\cel}{\emph{C.~elegans}}
 \newcommand{\ecol}{\emph{E.~coli}}
 
 % % gene names
-\newcommand{\gene}[1]{\emph{#1}}
-%
+\newcommand{\gene}[1]{\mbox{\emph{#1}}}
+\newcommand{\genotype}[1]{\mbox{\emph{#1}}}
+\newcommand{\protein}[1]{\mbox{\uppercase{#1}}}
 
-% Must use biblatex to produce the Published Contents and Contributions, per-chapter bibliography (if desired), etc.
+% Must use biblatex to produce the Published Contents and Contributions,
+% per-chapter bibliography (if desired), etc.
 \usepackage[
     backend=biber,natbib,
     % IMPORTANT: load a style suitable for your discipline
@@ -56,12 +58,17 @@
 ]{biblatex}
 
 % Name of your .bib file(s)
-\addbibresource{example.bib}
 \addbibresource{hypoxia.bib}
 \addbibresource{female-transcriptome.bib}
+\addbibresource{allelic_series.bib}
 \addbibresource{tea.bib}
 \addbibresource{pea.bib}
 \addbibresource{ownpubs.bib}
+
+\usepackage{siunitx}
+\usepackage[algo2e]{algorithm2e}
+
+\DoubleSpacing{}
 
 \begin{document}
 
@@ -73,47 +80,96 @@
 \university{California Institute of Technology}    % Institution name
 \address{Pasadena, California}                     % Institution address
 \unilogo{caltech.png}                                 % Institution logo
-\copyyear{[Year Degree Conferred]}  % Year (of graduation) on diploma
-\defenddate{[Exact Date]}          % Date of defense
+\copyyear{[2018]}  % Year (of graduation) on diploma
+\defenddate{[18 September 2018]}          % Date of defense
 
 \orcid{0000--0001--5497--8264}
 
 %% IMPORTANT: Select ONE of the rights statement below.
-\rightsstatement{All rights
-reserved
-% \todo[size=\footnotesize]{Choose one from the choices in the source
-% code!! And delete this \texttt{todo} when you're done that}
-}
-% \rightsstatement{All rights reserved except where otherwise noted}
-% \rightsstatement{Some rights reserved. This thesis is distributed under a
-% [name license, e.g., ``Creative Commons Attribution-NonCommercial-ShareAlike License'']}
+\rightsstatement{All rights reserved}
 
 %%  If you'd like to remove the Caltech logo from your title page,
 % simply remove the "[logo]" text from the maketitle command
 \maketitle[logo]
-%\maketitle
 
 \begin{acknowledgements}
-   [Add acknowledgements here. If you do not wish to add any to your thesis,
-   you may simply add a blank titled Acknowledgements page.]
+  This thesis is possible thanks to the unwavering support of a long list of
+  individuals. I would like to thank my advisor, Paul W. Sternberg, for
+  providing a laboratory and an intellectual home for the past few years. I will
+  always remember our conversations over coffee at 9am in the lab. I taught
+  Systems Genetics with Paul as my project came into full maturity; these
+  lectures on genetics gave us a chance to recast the classical interpretations
+  with a genomics perspective. Those lectures are some of my fondest memories
+  at Caltech. I also need to acknowledge my thesis committee, Dianne K. Newman,
+  Elliot Meyerowitz and Matt Thomson. Without their advice, I would be
+  considerably more confused than I am today. Dianne has been a major figure
+  throughout my Ph.D., a great scientist with a heart to match, and I feel
+  lucky to have had an opportunity to learn from her insights. I also need to
+  thank Erich M. Schwarz, who taught me to argue, and taught me to write. Where
+  others were content to say my work was fine, Erich found every possible
+  loophole, every minor detail and every open question and pushed me to be
+  complete without being redundant. I am sincerely grateful for his guidance and
+  his mentorship.
+
+  I have been very lucky to have benefitted from a fantastic set of
+  collaborators in the Sternberg lab. I have been lucky to work with Hillel
+  Schwartz, a fantastic geneticist and good friend; Carmie Puckett Robinson,
+  with whom I started to work on transcriptome genetics; Daniel Leighton, who
+  taught me about worm pheromones and aging; Raymond Y. Lee and Juancarlos Chan,
+  with whom I learned all the intricacies of WormBase and tool design.
+  Throughout my time here, I have worked with 3 extremely talented
+  undergraduates who made working in the lab much more exciting: Tiffany Tsou,
+  Kyung Hoi (Joseph) Min and Vladimir Molchanov. Finally, I need to thank all
+  the members of the Sternberg lab for making science come to life: Jon Liu, Han
+  Wang, James Lee, Pei-Yin, Katie Brugman, Cynthia Chai, Wen Chen, Sarah Cohen,
+  Elizabeth Holman, Sandy Wong, Heenam Park, Daniel Jun Oh, Ravi Nath, Margaret
+  Ho, Srimoyee Ghosh, Sophie Walton, Sarah Torres, Shahla Gharib, Barbara Perry,
+  Animesh Ray and Elizabeth Glater. I cannot name all of the friends I have
+  made here at Caltech; I hope they know how grateful I am for their friendship.
+
+  I would like to briefly acknowledge the programs and the people who brought me
+  to Caltech. I would not be here without the EXtraordinary Research
+  Opportunities Program (EXROP) from HHMI, where I met Andrew Quon and Christy
+  Schultz. Through EXROP I met and had a chance to work for Susan Lindquist and
+  her (then) postdoc Georgios Karras, who taught me the beauty of yeast
+  genetics. I wish I could show Sue what I have done with the doors that she
+  opened for me. At Cornell, I was incredibly lucky to be adviced by Laurel
+  Southard, who believed in my potential no matter what grades might say.
+
+  Throughout my time at Caltech, I have never been alone. My family has been a
+  source of unconditional support. I thank my parents, Lilia and Josué, and my
+  brother, Andrés, for always believing in me.
+
+  Finally, I would like to give my heartfelt thanks to Heather Curtis.
+
+  Heather, you have been the sun, and the moon, and the stars in my life since I
+  met you. You brought new colors into my world. Every day, I learn to think in
+  new ways, I learn to see new things, thanks to you. I am a better person
+  because I am with you and I am grateful that life brought us together.
+
+  This thesis is for you.
 \end{acknowledgements}
 
 \begin{abstract}
-   [This abstract must provide a succinct and informative condensation of your
-   work. Candidates are welcome to prepare a lengthier abstract for inclusion
-   in the dissertation, and provide a shorter one in the CaltechTHESIS record.]
+  This thesis deals with the conceptual and computational framework required to
+  use transcriptomes as effective phenotypes for genetic analysis. I show here
+  how to compute and interpret the aggregate statistics for transcriptome-wide
+  epistasis and transcriptome-wide dominance using whole-organism transcriptomic
+  profiles of \cel{} mutants. Finally, I developed the WormBase Enrichment Suite
+  for enrichment analysis of genomic data.
 \end{abstract}
 
 %% Uncomment the `iknowhattodo' option to dismiss the instruction in the PDF.
-\begin{publishedcontent}%[iknowwhattodo]
+\begin{publishedcontent}[iknowwhattodo]
+
 % List your publications and contributions here.
-\nocite{Cahn:etal:2015,Cahn:etal:2016}
+\nocite{Angeles-Albores2018b, Angeles-Albores2018, Angeles2018micro,
+        Angeles-Albores2017, Angeles-Albores2016}
 \end{publishedcontent}
 
 \tableofcontents
 \listoffigures
 \listoftables
-\printnomenclature{}
 
 \mainmatter{}
 
@@ -123,83 +179,45 @@ reserved
   \printbibliography[heading=subbibliography]
 \end{refsection}
 
-\chapter{Genetic analysis of a metazoan pathway using transcriptomic phenotypes}
+\chapter{Reconstructing a metazoan genetic pathway with transcriptome-wide
+         epistasis measurements}
 \begin{refsection}
   \input{chapters/hypoxia}
   \printbibliography[heading=subbibliography]
 \end{refsection}
 
-\chapter{Transcriptomic description of an endogenous female state in \cel{}}
+\chapter{The \emph{Caenorhabditis~elegans} Female-Like State: Decoupling the
+         Transcriptomic Effects of Aging and Sperm Status}
 \begin{refsection}
   \input{chapters/female-transcriptome}
   \printbibliography[heading=subbibliography]
 \end{refsection}
 
-\chapter{Understanding the SynMuv phenotype from a transcriptomic perspective}
+\chapter{Using transcriptomes as mutant phenotypes reveals functional regions of
+         a Mediator subunit in \cel{}}
 \begin{refsection}
-  % \input{chapters/hypoxia}
-  % \printbibliography[heading=subbibliography]
-\end{refsection}
-
-\chapter{Qualitative or quantitative allelic series}
-\begin{refsection}
-  % \input{chapters/hypoxia}
-  % \printbibliography[heading=subbibliography]
-\end{refsection}
-
-\chapter{A study of dosage response in \cel{} using transcriptome profiling}
-\begin{refsection}
-  % \input{chapters/hypoxia}
-  % \printbibliography[heading=subbibliography]
-\end{refsection}
-
-\chapter{Structural genes have transcriptional consequences}
-\begin{refsection}
-  % \input{chapters/hypoxia}
-  % \printbibliography[heading=subbibliography]
-\end{refsection}
-
-\chapter{Genetic analysis of a pathway using transcriptomic trans-phenotypes}
-\begin{refsection}
-  % \input{chapters/hypoxia}
-  % \printbibliography[heading=subbibliography]
+  \input{chapters/allelic_series.tex}
+  \printbibliography[heading=subbibliography]
 \end{refsection}
 
 \chapter{Tissue enrichment analysis for \cel{} genomics}
 \begin{refsection}
-  \input{chapters/tea}
+  \input{chapters/tea.tex}
   \printbibliography[heading=subbibliography]
 \end{refsection}
 
-\chapter{Phenotype and gene ontology enrichment as guides for disease modeling
-         in \cel{}}
+\chapter{Two new functions in the WormBase Enrichment Suite}
 \begin{refsection}
-  \input{chapters/pea}
+  \input{chapters/pea.tex}
   \printbibliography[heading=subbibliography]
 \end{refsection}
-
-\chapter{An automated framework for transcriptional profiling}
-\begin{refsection}
-  % \input{chapters/hypoxia}
-  % \printbibliography[heading=subbibliography]
-\end{refsection}
-
-
 
 % \printbibliography[heading=bibintoc]
 
 \appendix
 
-\chapter{Questionnaire}
-\chapter{Consent Form}
-
 \printindex
 
 \theendnotes{}
-
-%% Pocket materials at the VERY END of thesis
-% \pocketmaterial
-% \extrachapter{Pocket Material: Map of Case Study Solar Systems}
-
 
 \end{document}
