@@ -92,6 +92,8 @@
 % simply remove the "[logo]" text from the maketitle command
 \maketitle[logo]
 
+\linenumbers{}
+
 \begin{acknowledgements}
   This thesis is possible thanks to the unwavering support of a long list of
   individuals. I would like to thank my advisor, Paul W. Sternberg, for
@@ -117,7 +119,7 @@
   with whom I started to work on transcriptome genetics; Daniel Leighton, who
   taught me about worm pheromones and aging; Raymond Y. Lee and Juancarlos Chan,
   with whom I learned all the intricacies of WormBase and tool design.
-  Throughout my time here, I have worked with 3 extremely talented
+  Throughout my time here, I have worked with three extremely talented
   undergraduates who made working in the lab much more exciting: Tiffany Tsou,
   Kyung Hoi (Joseph) Min and Vladimir Molchanov. Finally, I need to thank all
   the members of the Sternberg lab for making science come to life: Jon Liu, Han
@@ -147,24 +149,27 @@
   new ways, I learn to see new things, thanks to you. I am a better person
   because I am with you and I am grateful that life brought us together.
 
-  This thesis is for you.
+  \emph{This thesis is for you.}
 \end{acknowledgements}
 
 \begin{abstract}
   This thesis deals with the conceptual and computational framework required to
-  use transcriptomes as effective phenotypes for genetic analysis. I show here
-  how to compute and interpret the aggregate statistics for transcriptome-wide
-  epistasis and transcriptome-wide dominance using whole-organism transcriptomic
-  profiles of \cel{} mutants. Finally, I developed the WormBase Enrichment Suite
-  for enrichment analysis of genomic data.
+  use transcriptomes as effective phenotypes for genetic analysis. I demonstrate
+  that there are powerful theoretical reasons why Batesonian epistasis should
+  feature prominently in transcriptional phenotypes. I also show how to compute
+  and interpret the aggregate statistics for transcriptome-wide epistasis and
+  transcriptome-wide dominance using whole-organism transcriptomic profiles of
+  \cel{} mutants. Finally, I developed the WormBase Enrichment Suite for
+  enrichment analysis of genomic data.
 \end{abstract}
 
 %% Uncomment the `iknowhattodo' option to dismiss the instruction in the PDF.
 \begin{publishedcontent}[iknowwhattodo]
 
 % List your publications and contributions here.
-\nocite{Angeles-Albores2018b, Angeles-Albores2018, Angeles2018micro,
+\nocite{Angeles-Albores2018a, Angeles-Albores2018b,
         Angeles-Albores2017, Angeles-Albores2016}
+\nocite{Angeles2018micro}
 \end{publishedcontent}
 
 \tableofcontents
@@ -173,23 +178,84 @@
 
 \mainmatter{}
 
+\chapter*{Preface}
+\addcontentsline{toc}{chapter}{Preface}
+
+I have tried to organize this thesis in a way that makes sense. Briefly, the
+thesis can be viewed in three segments: Epistasis, complementation and software
+development. In doing so, I have broken the chronological order of my work, but
+I do not see this as a problem. Science is rarely linear, and it may often turn
+out that the last concepts to be found are actually those concepts that allow us
+to make sense of everything else. This has certainly been the case with my work.
+
+In Chapter 1, the reader will find a brief overview of the problem facing
+transcriptome genetics. This chapter encompasses a review of the relevant
+literature, but beyond that, I have tried to make arguments I think are
+important. First, transcriptome genetics has obviated the chasm between
+statistical epistasis and classical, or Batesonian, epistasis. The confusion
+between the two (related) terms has been one of the great misfortunes in the
+field of genetics, since it has hampered a significant amount of work. I am glad
+to say that in this thesis I have achieved the unification of both concepts,
+such that no confusion should happen. Second, although we now know how to search
+signs of epistasis and dominance in transcriptomes, the issue of counting
+phenotypic classes or modules is becoming increasingly ominous. Unless and until
+we can confidently identify and purge spurious modules, we will not be able to
+use these phenotypes to their full extent.
+
+In Chapter 2, I have written a theoretical argument that is the basis for the
+rest of the chapters dealing with epistasis. In this chapter, I prove that
+epistasis emerges from statistical mechanics, such that even genes that have
+enormously complex transcriptional mechanisms can in some cases exhibit
+Batesonian epistasis. This chapter establishes genetics as a variational method
+with which to probe an unknown partition function, enabling us to make statements
+about what values the partition function is or is not allowed to take.
+
+In Chapter 3, I develop the concept of transcriptome-wide epistasis and use
+it to reconstruct the well-studied hypoxia pathway. In Chapter 4, I use the
+concept of transcriptome-wide epistasis to identify a novel stage in the life
+cycle of the roundworm \cel{}.
+
+Chapter 5 deals with the issue of complementation, and its study through
+expression profiles. In my opinion, this is the most complicated chapter in this
+thesis. I struggled with every aspect of this project, but the result is, to my
+mind, pleasing.
+
+Chapter 6 and 7 deal with the creation of the WormBase Enrichment Suite.
+
+Throughout this thesis, I have tried to be pedagogical. If we don't make efforts
+to explain the computational methods we are developing, biology will pass from
+a scientific discipline to an astrological pseudo-science, and we will fail to
+see the true beauty in the stars above and instead imbue them with our human
+desires and flaws, asking them to help us reach fame instead of helping us to
+solve the mysteries that abound in our universe.
+
+
+% for some reason the introduction.bib file isn't working
+% so all the references are in the hypoxia.bib file for this chapter... sigh
 \chapter{Introduction}
 \begin{refsection}
-  \input{chapters/introduction}
+  \input{chapters/introduction.tex}
+  \printbibliography[heading=subbibliography]
+\end{refsection}
+
+\chapter{A Statistical Mechanical Theory of Genetics using Gene Expression
+         Phenotypes}
+\begin{refsection}
+  \input{chapters/genetics_theory.tex}
   \printbibliography[heading=subbibliography]
 \end{refsection}
 
 \chapter{Reconstructing a metazoan genetic pathway with transcriptome-wide
          epistasis measurements}
 \begin{refsection}
-  \input{chapters/hypoxia}
+  \input{chapters/hypoxia.tex}
   \printbibliography[heading=subbibliography]
 \end{refsection}
 
 \chapter{The \emph{Caenorhabditis~elegans} Female-Like State: Decoupling the
          Transcriptomic Effects of Aging and Sperm Status}
 \begin{refsection}
-  \input{chapters/female-transcriptome}
+  \input{chapters/female-transcriptome.tex}
   \printbibliography[heading=subbibliography]
 \end{refsection}
 
@@ -212,12 +278,27 @@
   \printbibliography[heading=subbibliography]
 \end{refsection}
 
+
+\chapter*{Conclusion}
+\addcontentsline{toc}{chapter}{Conclusion}
+
+I have tried to demonstrate that transcriptomes are phenotypes, and I have tried
+to show examples of how these phenotypes can be rigorously manipulated. The work
+is not without flaws, and some of it may even be wrong. However, I believe the
+principles of the work are correct: Batesonian epistasis exists in
+transcriptomes and should be a quantity of immense interest to us because it
+does not require a null hypothesis; allelic series must be explored using
+transcriptome-wide dominance; and we must continue to develop tools that make
+use of the enormous amount of information that the scientific community is
+actively generating. It is my hope that these concepts prove useful to the
+greater scientific community.
+
 % \printbibliography[heading=bibintoc]
 
-\appendix
+% \appendix
 
 \printindex
 
-\theendnotes{}
+% \theendnotes{}
 
 \end{document}
