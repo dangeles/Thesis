@@ -1,0 +1,414 @@
+%%%%%%%%%%%%
+%% Please rename this main.tex file and the output PDF to
+%% [lastname_firstname_graduationyear]
+%% before submission.
+%%%%%%%%%%%%
+
+\documentclass[12pt]{caltech_thesis}
+\usepackage[hyphens]{url}
+\usepackage{lipsum}
+\usepackage{graphicx}
+\graphicspath{{images/}}
+\usepackage{todonotes}
+\usepackage{adjustbox}
+\usepackage{csvsimple} %insert tables using .csv files
+
+
+% activates the subbottom and subtop environments in memoir
+% \newsubfloat{figure}
+
+%% Tentative: newtx for better-looking Times
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{newtxtext,newtxmath}
+\usepackage{nameref}
+% line numbers
+\usepackage[right]{lineno}
+% improves typesetting in LaTeX
+% \usepackage{microtype}
+% degree symbol
+\usepackage{gensymb}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{color}
+\definecolor{Gray}{gray}{.25}
+
+\usepackage[colorlinks = true,
+            linkcolor = blue,
+            urlcolor  = blue,
+            citecolor = blue,
+            anchorcolor = blue]{hyperref}
+
+%commands
+\newcommand{\qval}[1]{\(q<10^{-#1}\)}
+\newcommand{\cel}{\emph{C.~elegans}}
+\newcommand{\ecol}{\emph{E.~coli}}
+
+% % gene names
+\newcommand{\gene}[1]{\mbox{\emph{#1}}}
+\newcommand{\genotype}[1]{\mbox{\emph{#1}}}
+\newcommand{\protein}[1]{\mbox{\uppercase{#1}}}
+
+% Must use biblatex to produce the Published Contents and Contributions,
+% per-chapter bibliography (if desired), etc.
+\usepackage[
+    backend=biber,natbib,
+    % IMPORTANT: load a style suitable for your discipline
+    style=authoryear
+]{biblatex}
+
+% Name of your .bib file(s)
+% \addbibresource{hypoxia.bib}
+% \addbibresource{female-transcriptome.bib}
+% \addbibresource{allelic_series.bib}
+% \addbibresource{tea.bib}
+% \addbibresource{pea.bib}
+\addbibresource{all_citations.bib}
+\addbibresource{ownpubs.bib}
+
+\usepackage{siunitx}
+\usepackage[algo2e]{algorithm2e}
+
+\DoubleSpacing{}
+
+\begin{document}
+
+% Do remember to remove the square bracket!
+\title{A theory of genetic analysis using transcriptomic phenotypes}
+\author{David Angeles-Albores}
+
+\degreeaward{Doctor of Philosophy}                 % Degree to be awarded
+\university{California Institute of Technology}    % Institution name
+\address{Pasadena, California}                     % Institution address
+\unilogo{caltech.png}                                 % Institution logo
+\copyyear{2019}  % Year (of graduation) on diploma
+\defenddate{Defended September 18, 2018}          % Date of defense
+
+\orcid{0000--0001--5497--8264}
+
+%% IMPORTANT: Select ONE of the rights statement below.
+\rightsstatement{All rights reserved}
+
+%%  If you'd like to remove the Caltech logo from your title page,
+% simply remove the "[logo]" text from the maketitle command
+\maketitle[logo]
+
+% \linenumbers{}
+
+\begin{acknowledgements}
+  This thesis is possible thanks to the unwavering support of a long list of
+  individuals. I would like to thank my advisor, Paul W. Sternberg, for
+  providing a laboratory and an intellectual home for the past few years. I will
+  always remember our conversations over coffee at 9am in the lab. I taught
+  Systems Genetics with Paul as my project came into full maturity; these
+  lectures on genetics gave us a chance to recast the classical interpretations
+  with a genomics perspective. Those lectures are some of my fondest memories
+  at Caltech. I also need to acknowledge my thesis committee, Dianne K. Newman,
+  Elliot Meyerowitz and Matt Thomson. Without their advice, I would be
+  considerably more confused than I am today. Dianne has been a major figure
+  throughout my Ph.D., a great scientist with a heart to match, and I feel
+  lucky to have had an opportunity to learn from her insights. I also need to
+  thank Erich M. Schwarz, who taught me to argue, and taught me to write. Where
+  others were content to say my work was fine, Erich found every possible
+  loophole, every minor detail and every open question and pushed me to be
+  complete without being redundant. I am sincerely grateful for his guidance and
+  his mentorship.
+
+  I have benefitted from a fantastic set of collaborators in the Sternberg lab.
+  I have been lucky to work with Hillel Schwartz, a fantastic geneticist and
+  good friend; Carmie Puckett Robinson, with whom I started to work on
+  transcriptome genetics; Daniel Leighton, who taught me about worm pheromones
+  and aging; Raymond Y. Lee and Juancarlos Chan, with whom I learned all the
+  intricacies of WormBase and tool design. Throughout my time here, I have
+  worked with three extremely talented undergraduates who made working in the
+  lab much more exciting: Tiffany Tsou, Kyung Hoi (Joseph) Min and Vladimir
+  Molchanov. Finally, I need to thank all the members of the Sternberg lab for
+  making science come to life: Jon Liu, Han Wang, James Lee, Pei-Yin, Katie
+  Brugman, Cynthia Chai, Wen Chen, Sarah Cohen, Elizabeth Holman, Sandy Wong,
+  Heenam Park, Daniel Jun Oh, Ravi Nath, Margaret Ho, Srimoyee Ghosh, Sophie
+  Walton, Sarah Torres, Shahla Gharib, Barbara Perry, Animesh Ray and Elizabeth
+  Glater. I cannot name all of the friends I have made here at Caltech; I hope
+  they know how grateful I am for their friendship.
+
+  I would like to briefly acknowledge the programs and the people who brought me
+  to Caltech. I would not be here without the EXtraordinary Research
+  Opportunities Program (EXROP) from HHMI, where I met Andrew Quon and Christy
+  Schultz. Through EXROP I met and had a chance to work for Susan Lindquist and
+  her (then) postdoc Georgios Karras, who taught me the beauty of yeast
+  genetics. I wish I could show Sue what I have done with the doors that she
+  opened for me. At Cornell, I was incredibly lucky to be adviced by Laurel
+  Southard, who believed in my potential no matter what grades might say.
+
+  Throughout my time at Caltech, I have never been alone. My family has been a
+  source of unconditional support. I thank my parents, Lilia and Josué, and my
+  brother, Andrés, for always believing in me.
+
+  Finally, I would like to give my heartfelt thanks to Heather L. Curtis.
+
+  Heather, you have been the sun, and the moon, and the stars in my life since I
+  met you. You brought new colors into my world. Every day, I learn to think in
+  new ways, I learn to see new things, thanks to you. I am a better person
+  because I am with you and I am grateful that life brought us together.
+
+  \emph{This thesis is for you.}
+\end{acknowledgements}
+
+\begin{abstract}
+  This thesis deals with the conceptual and computational framework required to
+  use transcriptomes as effective phenotypes for genetic analysis. I demonstrate
+  that there are powerful theoretical reasons why Batesonian epistasis should
+  feature prominently in transcriptional phenotypes. I also show how to compute
+  and interpret the aggregate statistics for transcriptome-wide epistasis and
+  transcriptome-wide dominance using whole-organism transcriptomic profiles of
+  \cel{} mutants. Finally, I developed the WormBase Enrichment Suite for
+  enrichment analysis of genomic data.
+
+  RNA-seq as a tool has enormous potential because it relies on protocols that
+  are fast, simple and increasingly cheap. In spite of their potential,
+  transcriptomes have seen their use largely limited to single-factor
+  experiments. Even when many transcriptomes are collected, the main analytic
+  approach is to apply clustering algorithms that correlate responses but do not
+  have any power to identify causal mechanisms.
+
+  I demonstrate that if a complete genetic experimental design is used (in the
+  form of a full two-factor matrix), transcriptomes can establish genetic
+  interactions between a pair of genes without the need for clustering
+  algorithms. Surprisingly, when we performed epistasis analyses of hypoxia
+  pathway mutants in \cel{} we did not simply observe a generalized epistatic
+  interaction between the mutants. In fact, the transcriptomes recapitulated the
+  same Batesonian epistatic relationship that had been observed using classical
+  phenotypes. In other words, we observed that the transcriptomic phenotype of
+  one gene can be masked by the transcriptomic phenotype of a second gene, such
+  that a double mutant of these two genes has exactly the same phenotype as a
+  single mutant of the epistatic gene. Motivated by this observation, we
+  developed methods to recognize and interpret Batesonian epistasis at the
+  transcriptomic level. This method relies on the calculation of a single
+  aggregate coefficient that we named the transcriptome-wide epistasis
+  coefficient.
+
+  The observation that Batesonian epistasis could be reproduced on a
+  transcriptomic level was surprising. To explain how transcriptome-wide
+  epistasis can arise, I studied a simplified model of transcriptional
+  regulation using statistical mechanics. These studies demonstrate that
+  epistatic analysis is equivalent to a perturbative analysis of the partition
+  function of a promoter. Moreover, these studies revealed that a sufficient
+  condition for Batesonian epistasis to occur is if the two genes encode
+  variables that are transformed and multiplied together to form an effective
+  single compound variable. Finally, these studies clearly demonstrate the
+  connection between statistical (or generalized) epistasis and Batesonian
+  epistasis and establish a physical basis for genetic logic.
+
+  Genetic analyses of gene functional units can also be carried out using
+  allelic series in tandem with complementation (also known as dominance) tests.
+  I developed a statistical coefficient known as transcriptome-wide dominance
+  to enable analyses of allelic series using expression profiles. A crucial
+  aspect of allelic series is the ability to enumerate the independent
+  phenotypes associated with an arbitrary set of alleles. I developed the
+  concept of phenotypic classes as a transcriptomic analogue of classical
+  phenotypes for this purpose. Briefly, a phenotypic class is a set of
+  transcripts that are differentially expressed in a specific set of genotypes.
+  Thus, an allelic series consisting of two mutant alleles (and a wild-type) can
+  at most result in 7 phenotypic classes. However, some of these phenotypic
+  classes may be artifactual as a result of the significant false positive and
+  false negative rates that are associated with RNA-seq. I developed a simple
+  algorithm that tries to identify phenotypic classes that are artifactual,
+  though often these classes may also be identified through a critical
+  evaluation of their biological implications. I applied these concepts to a
+  small allelic series of the \gene{dpy-22} gene, which encodes a Mediator
+  subunit in \cel{}, and identified 3--4 functional units along with their
+  sequence requirements.
+
+  Finally, I developed the WormBase Enrichment Suite by implementing a
+  hypergeometric test on the tissue, gene and phenotype ontology for \cel{}.
+  The importance of this tool derives mainly from its integration to WormBase,
+  the repository of all \cel{} knowledge, which means that the databases that
+  are tested will undergo continuous improvement and curation, and thus will
+  yield the most accurate results.
+\end{abstract}
+
+%% Uncomment the `iknowhattodo' option to dismiss the instruction in the PDF.
+\begin{publishedcontent}[iknowwhattodo]
+
+% List your publications and contributions here.
+\nocite{Angeles-Albores2018a, Angeles-Albores2018b,
+        Angeles-Albores2017, Angeles-Albores2016}
+\nocite{Angeles2018micro}
+\end{publishedcontent}
+
+
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\mainmatter{}
+
+\chapter*{Preface}
+\addcontentsline{toc}{chapter}{Preface}
+
+I have tried to organize this thesis in a way that makes sense. Briefly, the
+thesis can be viewed in three segments: Epistasis, complementation and software
+development. In doing so, I have broken the chronological order of my work, but
+I do not see this as a problem. Science is rarely linear, and it may often turn
+out that the last concepts to be found are actually those concepts that allow us
+to make sense of everything else. This has certainly been the case with my work.
+
+In Chapter 1, the reader will find a brief overview of the problem facing
+transcriptome genetics. This chapter encompasses a review of the relevant
+literature, but beyond that, I have tried to make arguments I think are
+important. First, transcriptome genetics has obviated the chasm between
+statistical epistasis and classical, or Batesonian, epistasis. The confusion
+between the two (related) terms has been one of the great misfortunes in the
+field of genetics, since it has hampered a significant amount of work. I am glad
+to say that in this thesis I have achieved the unification of both concepts,
+such that no confusion should happen. Second, although we now know how to search
+signs of epistasis and dominance in transcriptomes, the issue of counting
+phenotypic classes or modules is becoming increasingly ominous. Unless and until
+we can confidently identify and purge spurious modules, we will not be able to
+use these phenotypes to their full extent.
+
+In Chapter 2, I have written a theoretical argument that is the basis for the
+rest of the chapters dealing with epistasis. In this chapter, I prove that
+epistasis emerges from statistical mechanics, such that even genes that have
+enormously complex transcriptional mechanisms can in some cases exhibit
+Batesonian epistasis. This chapter establishes genetics as a variational method
+with which to probe an unknown partition function, enabling us to make
+statements about what values the partition function is or is not allowed to
+take.
+
+In Chapter 3, I develop the concept of transcriptome-wide epistasis and use
+it to reconstruct the well-studied hypoxia pathway. In Chapter 4, I use the
+concept of transcriptome-wide epistasis to identify a novel stage in the life
+cycle of the roundworm \cel{}.
+
+Chapter 5 deals with the issue of complementation, and its study through
+expression profiles. In my opinion, this is the most complicated chapter in this
+thesis. I struggled with every aspect of this project, but the result is, to my
+mind, pleasing.
+
+Chapter 6 and 7 deal with the creation of the WormBase Enrichment Suite.
+
+Throughout this thesis, I have tried to be pedagogical. If we don't make efforts
+to explain the computational methods we are developing, biology will pass from
+a scientific discipline to an astrological pseudo-science, and we will fail to
+see the true beauty in the stars above and instead imbue them with our human
+desires and flaws, asking them to help us reach fame instead of helping us to
+solve the mysteries that abound in our universe.
+
+
+% for some reason the introduction.bib file isn't working
+% so all the references are in the hypoxia.bib file for this chapter... sigh
+\chapter{Introduction}
+\begin{refsection}
+  \input{chapters/introduction.tex}
+  \printbibliography[heading=subbibliography]
+\end{refsection}
+
+\chapter{A Statistical Mechanical Theory of Genetics using Gene Expression
+         Phenotypes}
+\begin{refsection}
+  \input{chapters/genetics_theory.tex}
+  \printbibliography[heading=subbibliography]
+\end{refsection}
+
+\chapter{Reconstructing a metazoan genetic pathway with transcriptome-wide
+         epistasis measurements}
+\publishedas{Angeles-Albores2018a}
+\begin{refsection}
+  \input{chapters/hypoxia.tex}
+  \printbibliography[heading=subbibliography]
+\end{refsection}
+
+\chapter{The \emph{Caenorhabditis~elegans} Female-Like State: Decoupling the
+         Transcriptomic Effects of Aging and Sperm Status}
+\publishedas{Angeles-Albores2017}
+\begin{refsection}
+  \input{chapters/female-transcriptome.tex}
+  \printbibliography[heading=subbibliography]
+\end{refsection}
+
+\chapter{Using transcriptomes as mutant phenotypes reveals functional regions of
+         a Mediator subunit in \cel{}}
+\publishedas{Angeles-Albores2018b}
+\begin{refsection}
+  \input{chapters/allelic_series.tex}
+  \printbibliography[heading=subbibliography]
+\end{refsection}
+
+\chapter{Tissue enrichment analysis for \cel{} genomics}
+\publishedas{Angeles-Albores2016}
+\begin{refsection}
+  \input{chapters/tea.tex}
+  \printbibliography[heading=subbibliography]
+\end{refsection}
+
+\chapter{Two new functions in the WormBase Enrichment Suite}
+\publishedas{Angeles2018micro}
+\begin{refsection}
+  \input{chapters/pea.tex}
+  \printbibliography[heading=subbibliography]
+\end{refsection}
+
+
+\chapter*{Conclusion}
+\addcontentsline{toc}{chapter}{Conclusion}
+
+As the phenotypes that we analyze grow more and more complex, it may be tempting
+to deploy methods to deal with large datasets developed in other disciplines to
+attempt to extract and understand the mechanics underlying our systems. These
+methods can be extremely effective, but only if they are fed the appropriate
+experimental designs and analyzed with biological principles in mind.
+
+Biology is replete with systems that have an enormous number of variables
+(genes) with highly non-linear relationships between them. As a result, modeling
+with differential equations will always be difficult. Differential equations are
+brittle, with great dependence on the model specifications and parameter values,
+particularly when the equations have non-linearities susceptible to
+bifurcations. Therefore, we need methods that are parameter-free and linear.
+In genetics, we find both properties.
+
+I have tried to demonstrate that transcriptomes are phenotypes, and I have tried
+to show examples of how these phenotypes can be rigorously and robustly
+manipulated to draw biologically meaningful conclusions. The work is not without
+flaws, and some of it may even be wrong. However, the principles are sound.
+Moreover, it seems apparent that these principles can be applied to many
+experimental settings, not just transcriptomes. It would be particularly
+interesting to apply these methods to two experimental tools: Metagenomics and
+Transposon sequencing. Metagenomics is used to survey communities and like
+RNA-seq can measure abundances with quantitative accuracy, but, like with
+RNA-seq, a major challenge has been the interpretation of the resulting
+datasets. I suspect that if metagenomes are inspected through single and double
+perturbations, the underlying community complexity will begin to unravel.
+Specifically, I \textbf{strongly} expect that Batesonian epistasis will play a
+major role in microbiomic communities, just as it does in genetic networks. I
+believe that if these complex communities are inspected for examples of
+epistasis, we will be able to identify groups of bacteria that are functionally
+interconnected, and we will begin to understand the mechanisms underlying these
+interconnections. A second area that is of increasing interest to me is
+Transposon sequencing (Tn-seq). In Tn-seq experiments, a mutant library is
+generated through transposon insertion. The library is subjected to a defined
+selection process and the library is sequenced to obtain the mutant proportions
+after selection. Thus, Tn-seq can be used to identify genetic elements linked
+causally to the phenotype of interest. Tn-seq can be performed on mutant
+backgrounds, not just wild-type strains. So far, Tn-seq experiments have
+performed single-factor analyses of wild-type and mutant enrichments to identify
+interactors in the desired environment. It would be incredibly interesting to
+perform Tn-seq epistasis experiments because the phenotype used to reconstruct
+the interaction be the \emph{genetic regulatory network associated with the
+genes under study}. At the same time, Tn-seq of multiple mutants would
+immediately yield the next layer of interactors or synthetic interactors in the
+network, naturally providing the next set of experiments to perform. I suspect
+this avenue could be particularly fruitful.
+
+It is my hope that these concepts prove useful to the greater scientific
+community.
+
+% \printbibliography[heading=bibintoc]
+
+% \appendix
+
+\printindex
+
+% \theendnotes{}
+
+\end{document}
